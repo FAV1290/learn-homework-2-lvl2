@@ -13,7 +13,6 @@ logging.basicConfig(format='%(name)s - %(levelname)s - %(message)s',
 
 def greet_user(update, context):
     update.message.reply_text('Привет! Ты вызвал команду /start', )
-    print(update.message.chat.username)
 
 
 def talk_to_me(update, context):
