@@ -5,7 +5,7 @@ import datetime
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters
 
 
-VERSION = '0.4.1'
+VERSION = '0.4.2'
 logging.basicConfig(format='%(name)s - %(levelname)s - %(message)s',
                     level=logging.INFO,
                     filename='bot.log')
@@ -39,9 +39,9 @@ def find_constellation(update, context):
     }
     my_planet = update.message.text.split()[1].lower()
     now = datetime.datetime.now()
-    head = f'{my_planet.capitalize()} is currently in the constellation of '
     sorry = "Sorry, I don't know this planet"
     if my_planet in planets:
+        head = f'{my_planet.capitalize()} is currently in the constellation of '
         my_constellation = ephem.constellation(planets[my_planet](now))[1]
         update.message.reply_text(f'{head}{my_constellation}')
     else:
@@ -61,17 +61,17 @@ def count_words(update, context):
 def when_full_moon(update, context):
     user_input = update.message.text.split()
     dt = datetime.datetime
-    try:
-        if len(user_input) == 1:
-            user_date = datetime.date.today()
-            next_full_moon = dt.strftime(ephem.next_full_moon(user_date).datetime(), '%d-%m-%Y')
-            update.message.reply_text(f'Next full moon date: {next_full_moon}')
-        else:
+    if len(user_input) == 1:
+        user_date = datetime.date.today()
+        prefix = ''
+    else:
+        try:
             user_date = dt.strptime(user_input[1], '%Y-%m-%d')
-            next_full_moon = dt.strftime(ephem.next_full_moon(user_date).datetime(), '%d-%m-%Y')
-            update.message.reply_text(f'Next full moon date after the date you input: {next_full_moon}')
-    except ValueError:
-        update.message.reply_text('Incorrect date. Proper date format is YYYY-MM-DD')
+        except ValueError:
+            update.message.reply_text('Incorrect date. Proper date format is YYYY-MM-DD')
+        prefix =  ' after the date you input'
+    next_full_moon = dt.strftime(ephem.next_full_moon(user_date).datetime(), '%d-%m-%Y')
+    update.message.reply_text(f'Next full moon date{prefix}: {next_full_moon}')
 
 
 def main():
