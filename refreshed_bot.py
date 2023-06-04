@@ -39,13 +39,12 @@ def find_constellation(update, context):
     }
     my_planet = update.message.text.split()[1].lower()
     now = datetime.datetime.now()
-    sorry = "Sorry, I don't know this planet"
     if my_planet in planets:
         head = f'{my_planet.capitalize()} is currently in the constellation of '
         my_constellation = ephem.constellation(planets[my_planet](now))[1]
         update.message.reply_text(f'{head}{my_constellation}')
     else:
-        update.message.reply_text(f'{sorry}') 
+        update.message.reply_text("Sorry, I don't know this planet") 
 
 
 # Реализуйте в боте команду /wordcount которая считает слова в присланной фразе
